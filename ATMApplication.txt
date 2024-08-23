@@ -1,0 +1,141 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+
+class BankAccount {
+    private double balance;
+
+    
+    public BankAccount(double initialBalance) {
+        if (initialBalance >= 0) {
+            this.balance = initialBalance;
+        } else {
+            this.balance = 0;
+        }
+    }
+
+    
+    public double getBalance() {
+        return balance;
+    }
+
+    
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+        }
+    }
+
+    
+    public boolean withdraw(double amount) {
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;
+            return true;
+        }
+        return false;
+    }
+}
+
+
+class ATMGUI {
+    private BankAccount account;
+    private JFrame frame;
+
+    
+    public ATMGUI(BankAccount account) {
+        this.account = account;
+        createGUI();
+    }
+
+    
+    private void createGUI() {
+        frame = new JFrame("ATM Machine");
+        frame.setSize(300, 250);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+        frame.add(panel);
+        placeComponents(panel);
+
+        frame.setVisible(true);
+    }
+
+    
+    private void placeComponents(JPanel panel) {
+        panel.setLayout(null);
+
+        JLabel welcomeLabel = new JLabel("Welcome to the ATM");
+        welcomeLabel.setBounds(80, 10, 200, 25);
+        panel.add(welcomeLabel);
+
+        JButton checkBalanceButton = new JButton("Check Balance");
+        checkBalanceButton.setBounds(10, 40, 260, 25);
+        panel.add(checkBalanceButton);
+        checkBalanceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(frame, "Your current balance is: $" + account.getBalance());
+            }
+        });
+
+        JButton depositButton = new JButton("Deposit");
+        depositButton.setBounds(10, 80, 120, 25);
+        panel.add(depositButton);
+        depositButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String amountStr = JOptionPane.showInputDialog(frame, "Enter amount to deposit:");
+                try {
+                    double amount = Double.parseDouble(amountStr);
+                    account.deposit(amount);
+                    JOptionPane.showMessageDialog(frame, "Deposit successful.");
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(frame, "Invalid input. Please enter a valid number.");
+                }
+            }
+        });
+
+        JButton withdrawButton = new JButton("Withdraw");
+        withdrawButton.setBounds(150, 80, 120, 25);
+        panel.add(withdrawButton);
+        withdrawButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String amountStr = JOptionPane.showInputDialog(frame, "Enter amount to withdraw:");
+                try {
+                    double amount = Double.parseDouble(amountStr);
+                    if (account.withdraw(amount)) {
+                        JOptionPane.showMessageDialog(frame, "Withdrawal successful.");
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Insufficient balance or invalid amount.");
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(frame, "Invalid input. Please enter a valid number.");
+                }
+            }
+        });
+
+        JButton exitButton = new JButton("Exit");
+        exitButton.setBounds(10, 120, 260, 25);
+        panel.add(exitButton);
+        exitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+            }
+        });
+    }
+}
+
+
+public class ATMApplication {
+    public static void main(String[] args) {
+        
+        BankAccount account = new BankAccount(1000);
+
+        
+        new ATMGUI(account);
+    }
+}
