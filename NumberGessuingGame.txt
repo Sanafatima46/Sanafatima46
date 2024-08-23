@@ -1,0 +1,78 @@
+import java.util.Random;
+import java.util.Scanner;
+
+public class NumberGuessingGame {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+        String playAgain;
+        int highScore = -1;  // Represents no valid high score yet
+
+        do {
+            int secretNumber = random.nextInt(100) + 1;
+            System.out.println("Welcome to the Advanced Number Guessing Game!");
+            System.out.println("I've picked a number between 1 and 100. Can you guess it?");
+            
+            System.out.print("How many attempts would you like? ");
+            int maxAttempts = scanner.nextInt();
+
+            int attempts = 0;
+            boolean guessed = false;
+            int lowerBound = 1;
+            int upperBound = 100;
+            boolean hintOffered = false;
+
+            while (attempts < maxAttempts && !guessed) {
+                System.out.print("Enter your guess (between " + lowerBound + " and " + upperBound + "): ");
+                int guess = scanner.nextInt();
+                attempts++;
+
+                if (guess < secretNumber) {
+                    System.out.println("Too low! Try again.");
+                    lowerBound = guess + 1;
+                } else if (guess > secretNumber) {
+                    System.out.println("Too high! Try again.");
+                    upperBound = guess - 1;
+                } else {
+                    System.out.println("Congratulations! You've guessed the number in " + attempts + " attempts!");
+                    guessed = true;
+
+                    if (highScore == -1 || attempts < highScore) {
+                        highScore = attempts;
+                        System.out.println("New high score!");
+                    }
+                }
+
+                // Offer a hint if the game is not guessed and at half of the max attempts
+                if (!guessed && !hintOffered && attempts == maxAttempts / 2) {
+                    System.out.print("Would you like a hint? (yes/no): ");
+                    String wantsHint = scanner.next();
+                    if (wantsHint.equalsIgnoreCase("yes")) {
+                        if (secretNumber % 2 == 0) {
+                            System.out.println("Hint: The secret number is even.");
+                        } else {
+                            System.out.println("Hint: The secret number is odd.");
+                        }
+                    }
+                    hintOffered = true;
+                }
+            }
+
+            if (!guessed) {
+                System.out.println("Sorry, you've run out of attempts. The number was " + secretNumber + ".");
+            }
+
+            System.out.print("Do you want to play again? (yes/no): ");
+            playAgain = scanner.next();
+
+        } while (playAgain.equalsIgnoreCase("yes"));
+
+        if (highScore != -1) {  // Only display if there's a valid high score
+            System.out.println("Thank you for playing! Your high score is: " + highScore);
+        } else {
+            System.out.println("Thank you for playing!");
+        }
+
+        scanner.close();
+    }
+}
