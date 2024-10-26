@@ -1,4 +1,4 @@
-- 👋 Hi, I’m @Sanafatima46
-- 👀 I’m interested in coding
-- 🌱 I’m currently learning my bechlors degree Computer sceince
-- 💞️ I’m looking to collaborate on java , python projects
+- 👋 Hi, I’m Sanafatima from Pakistan.
+- 👀 I’m interested in coding.
+- 🌱 I’m currently learning my bechlors degree Computer sceince.
+- 💞️ I’m looking to collaborate on java , python projects.
